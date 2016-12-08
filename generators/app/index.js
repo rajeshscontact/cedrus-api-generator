@@ -12,25 +12,25 @@ module.exports = yeoman.Base.extend({
 
     var prompts = [{
       type: 'confirm',
-      name: 'someAnswer',
-      message: 'Would you like to enable this option?',
+      name: 'JSONSchema',
+      message: 'Do you have a sample JSON object?',
       default: true
     }];
 
     return this.prompt(prompts).then(function (props) {
       // To access props later use this.props.someAnswer;
-      this.props = props;
+      console.log('props', props);
+      this.config.set({"props": props})
+      if (props.JSONSchema) {
+        this.composeWith('cedrus-api:createJSONSchema');
+      } else {
+        this.composeWith('cedrus-api:startAPICreation')
+      }
     }.bind(this));
   },
 
-  writing: function () {
-    this.fs.copy(
-      this.templatePath('dummyfile.txt'),
-      this.destinationPath('dummyfile.txt')
-    );
-  },
-
   install: function () {
+    this.config.save();
     this.installDependencies();
   }
 });
