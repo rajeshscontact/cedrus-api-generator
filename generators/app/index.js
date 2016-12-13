@@ -11,21 +11,20 @@ module.exports = yeoman.Base.extend({
     ));
 
     var prompts = [{
-      type: 'confirm',
-      name: 'JSONSchema',
-      message: 'Do you have a sample JSON object?',
-      default: true
-    }];
+      type: 'input',
+      name: 'APIName',
+      message: 'What would you like to call your API?'
+    },
+      {
+        type: 'input',
+        name: 'APIDescription',
+        message: 'Describe your API.'
+      }];
 
     return this.prompt(prompts).then(function (props) {
-      // To access props later use this.props.someAnswer;
       console.log('props', props);
-      this.config.set({"props": props})
-      if (props.JSONSchema) {
-        this.composeWith('cedrus-api:createJSONSchema');
-      } else {
-        this.composeWith('cedrus-api:startAPICreation')
-      }
+      this.config.set({APIOverviewProps: props});
+      this.composeWith('cedrus-api:DataInput');
     }.bind(this));
   },
 
