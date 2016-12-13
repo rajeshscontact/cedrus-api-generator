@@ -16,7 +16,7 @@ module.exports = yeoman.Base.extend({
       if (props.JSONAvailable) {
         this.composeWith('cedrus-api:JSONConversion');
       } else {
-        this.composeWith('cedrus-api:StartLoopBack');
+        this.composeWith('cedrus-api:StartLoopback');
       }
     }.bind(this));
   }
