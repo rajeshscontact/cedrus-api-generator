@@ -60,7 +60,7 @@ var runGen = function () {
       request({
         url: responseObj.link,
         encoding: null
-      }).pipe(unzip.Extract({path: '/'}));
+      }).pipe(unzip.Extract({path: '.'}));
     });
   });
 };
