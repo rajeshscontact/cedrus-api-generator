@@ -22,7 +22,7 @@ module.exports = yeoman.Base.extend({
       }];
 
     return this.prompt(prompts).then(function (props) {
-      console.log('props', props);
+      console.log('props APP', props);
       this.config.set({APIOverviewProps: props});
       this.composeWith('cedrus-api:DataInput');
     }.bind(this));
