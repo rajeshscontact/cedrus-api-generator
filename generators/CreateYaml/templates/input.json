@@ -1,0 +1,75 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"version": "0.0.1",
+		"title": "",
+		"description": ""
+	},
+	"host": "localhost:8080",
+	"basePath": "",
+	"schemes": [
+		"https"
+	],
+	"produces": [
+		"application/json"
+	],
+	"paths": {},
+	"definitions": {
+		"Error": {
+			"type": "object",
+			"properties": {
+				"code": {
+					"type": "integer",
+					"format": "int32"
+				},
+				"message": {
+					"type": "string"
+				},
+				"fields": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"responses": {
+		"Standard500ErrorResponse": {
+			"description": "An unexpected error occured.",
+			"schema": {
+				"$ref": "#/definitions/Error"
+			}
+		},
+		"PersonDoesNotExistResponse": {
+			"description": "Person does not exist."
+		}
+	},
+	"x-ibm-configuration": {
+		"testable": true,
+		"enforced": true,
+		"cors": {
+			"enabled": true
+		},
+		"gateway": "datapower-gateway",
+		"catalogs": {
+			"apic-dev": {
+				"properties": {
+					"runtime-url": "$(TARGET_URL)"
+				}
+			},
+			"sb": {
+				"properties": {
+					"runtime-url": "http://localhost:8080"
+				}
+			}
+		},
+		"assembly": {
+			"execute": [{
+				"invoke": {
+					"target-url": "$(runtime-url)$(request.path)?language=$(request.parameters.language)",
+					"tls-profile": "",
+					"secure-gateway": false
+				}
+			}],
+			"catch": []
+		}
+	}
+}
