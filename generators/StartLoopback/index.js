@@ -14,7 +14,7 @@ module.exports = yeoman.Base.extend({
     console.log('START LOOPBACK');
   },
   writing: function () {
-    this.copy('petstore.yaml', 'swaggerConfig/petstore.yaml');
+    this.copy('demo.yaml', 'swaggerConfig/demo.yaml');
   },
   end: function () {
     runGen();
@@ -22,7 +22,7 @@ module.exports = yeoman.Base.extend({
 });
 
 var runGen = function () {
-  fs.readFile(path.resolve('swaggerConfig/petstore.yaml'), 'utf8', function (error, yaml) {
+  fs.readFile(path.resolve('swaggerConfig/demo.yaml'), 'utf8', function (error, yaml) {
     if (error) {
       throw error;
     }
