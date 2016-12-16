@@ -7,7 +7,7 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the hunky-dory ' + chalk.red('generator-cedrus-api') + ' generator!'
+      'Welcome to the Cedrus ' + chalk.red('generator-cedrus-api') + ' generator!'
     ));
 
     var prompts = [{
@@ -27,6 +27,92 @@ module.exports = yeoman.Base.extend({
       name: 'APIBasePath',
       message: 'Enter Base Path of your api.',
       default: '/api'
+    },
+    {
+      type: 'input',
+      name: 'APIPath',
+      message: 'Enter Base Path of your api.',
+      default: '/test'
+    },
+    {
+      type: 'checkbox',
+      name: 'APIHttpMethods',
+      message: 'which http methods you would like to generate',
+      choices:[
+        {
+          name: 'GET',
+          value: 'get',
+          checked: true
+        },
+        {
+          name: 'POST',
+          value: 'post',
+          checked: true
+        },
+        {
+          name: 'PUT',
+          value: 'put',
+          checked: true
+        },
+        {
+          name: 'PATCH',
+          value: 'patch',
+          checked: true
+        },
+        {
+          name: 'DELETE',
+          value: 'delete',
+          checked: true
+        }
+      ]
+    },
+    {
+      type: 'checkbox',
+      name: 'APIConsumes',
+      message: 'which type of files api consumes',
+      choices:[
+        {
+          name: 'JSON',
+          value: 'application/json',
+          checked: true
+        },
+        {
+          name: 'XML',
+          value: 'application/xml'
+        },
+        {
+          name: 'TEXT XML',
+          value: 'text/xml'
+        },
+        {
+          name: 'TEXT HTML',
+          value: 'text/html'
+        }
+      ]
+    },
+    {
+      type: 'checkbox',
+      name: 'APIProduces',
+      message: 'which type of files api produces',
+      choices:[
+        {
+          name: 'JSON',
+          value: 'application/json',
+          checked: true
+        },
+        {
+          name: 'XML',
+          value: 'application/xml'
+        },
+        {
+          name: 'TEXT XML',
+          value: 'text/xml'
+        },
+        {
+          name: 'TEXT HTML',
+          value: 'text/html'
+        }
+      ]
     }];
 
     return this.prompt(prompts).then(function (props) {
