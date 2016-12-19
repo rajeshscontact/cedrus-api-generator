@@ -14,10 +14,13 @@ module.exports = yeoman.Base.extend({
       console.log('props DataInput', props);
       this.config.set({DataInput: props});
       if (props.JSONAvailable) {
-        this.composeWith('cedrus-api:JSONConversion');
+        this.composeWith('cedrus-api:JSONExtraction');
+        this.composeWith('cedrus-api:JSONInput');
+        this.composeWith('cedrus-api:HTTPStatusCodes');
+        this.composeWith('cedrus-api:CreateYaml');
       } else {
-        this.composeWith('cedrus-api:CreateYaml', {options: {APIOverviewProps: this.options.APIOverviewProps}});
-        this.composeWith('cedrus-api:StartLoopback');
+        this.composeWith('cedrus-api:CreateYaml');
+        this.composeWith('cedrus-api:StartSwaggerGen');
       }
     }.bind(this));
   }
