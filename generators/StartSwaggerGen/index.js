@@ -11,10 +11,10 @@ var language = 'nodejs-server';
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('START LOOPBACK');
+    console.log('START Swagger Gen');
   },
   writing: function () {
-    this.copy('demo.yaml', 'swaggerConfig/demo.yaml');
+    // this.copy('demo.yaml', 'swaggerConfig/demo.yaml');
   },
   end: function () {
     runGen();
@@ -22,7 +22,7 @@ module.exports = yeoman.Base.extend({
 });
 
 var runGen = function () {
-  fs.readFile(path.resolve('swaggerConfig/demo.yaml'), 'utf8', function (error, yaml) {
+  fs.readFile(path.resolve('swaggerConfig/input.yaml'), 'utf8', function (error, yaml) {
     if (error) {
       throw error;
     }
