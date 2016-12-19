@@ -16,6 +16,15 @@ module.exports = yeoman.Base.extend({
   }
 });
 
+//
+// FORMATING FUNCTIONS
+//
+var capitalizeFirstLetter = function (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+//
+// JOB HANDELING FUNCTIONS
+//
 var addHTTPCodes = function (options, cb) {
   /*
   **  Reading the copied json file and adding the required paramaters
@@ -54,8 +63,8 @@ var addToPaths = function (inputJSON, options, apiPath) {
   httpMethods.forEach(function (httpMethod) {
     inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = {};
     var httpOptions = {};
-    httpOptions.description = 'Returns all ' + apiPath.resourceName + 's from the system that the user has access to';
-    httpOptions.operationId = httpMethod + apiPath.resourceName;
+    httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + apiPath.resourceName + 's from the system that the user has access to';
+    httpOptions.operationId = httpMethod + capitalizeFirstLetter(apiPath.resourceName);
     httpOptions.produces = options.APIOverviewProps.APIProduces;
     httpOptions.responses = {};
     //
@@ -68,7 +77,7 @@ var addToPaths = function (inputJSON, options, apiPath) {
       responses[httpStatusCode].schema = {};
       responses[httpStatusCode].schema.type = 'array';
       responses[httpStatusCode].schema.items = {};
-      responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
+      // responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
     });
     httpOptions.responses = responses;
     inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = httpOptions;
