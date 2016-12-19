@@ -74,9 +74,9 @@ var addToPaths = function (inputJSON, options, apiPath) {
     httpStatusCodes.forEach(function (httpStatusCode) {
       responses[httpStatusCode] = {};
       responses[httpStatusCode].description = apiPath.resourceName + ' response';
-      responses[httpStatusCode].schema = {};
-      responses[httpStatusCode].schema.type = 'array';
-      responses[httpStatusCode].schema.items = {};
+      // responses[httpStatusCode].schema = {};
+      // responses[httpStatusCode].schema.type = 'array';
+      // responses[httpStatusCode].schema.items = {};
       // responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
     });
     httpOptions.responses = responses;

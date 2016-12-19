@@ -18,6 +18,8 @@ module.exports = yeoman.Base.extend({
         this.composeWith('cedrus-api:JSONInput');
         this.composeWith('cedrus-api:HTTPStatusCodes');
         this.composeWith('cedrus-api:CreateYaml');
+        this.composeWith('cedrus-api:StartSwaggerGen');
+        
       } else {
         this.composeWith('cedrus-api:CreateYaml');
         this.composeWith('cedrus-api:StartSwaggerGen');
