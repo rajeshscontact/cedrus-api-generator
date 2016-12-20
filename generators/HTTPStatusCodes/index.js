@@ -2,7 +2,6 @@
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
 var path = require('path');
-var jsonSchemaGenerator = require('json-schema-generator');
 var httpStatusCodes = ['200', '404', '500'];
 
 module.exports = yeoman.Base.extend({
@@ -38,7 +37,6 @@ var addHTTPCodes = function (options, cb) {
     var inputJSON = JSON.parse(jsonObj);
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
-      addToDefinitions(inputJSON, apiPath);
       addToPaths(inputJSON, options, apiPath);
     });
     // /*
@@ -54,19 +52,6 @@ var addHTTPCodes = function (options, cb) {
   });
 };
 
-/*
-** This method converts provider json to schema object and adds to definitions
-*/
-var addToDefinitions = function(inputJSON, apiPath){
-  var contents = fs.readFileSync(path.resolve(apiPath.JSONFilePath), 'utf8');
-  var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
-  inputJSON.definitions[apiPath.resourceName] = {};
-  inputJSON.definitions[apiPath.resourceName] = schemaObj;
-}
-
-/*
-** This method add's user selected paths with appropriate error codes
-*/
 var addToPaths = function (inputJSON, options, apiPath) {
   if (inputJSON.paths === {} || typeof inputJSON.paths['/' + apiPath.resourceName + 's'] === 'undefined') {
     inputJSON.paths['/' + apiPath.resourceName + 's'] = {};
@@ -89,10 +74,10 @@ var addToPaths = function (inputJSON, options, apiPath) {
     httpStatusCodes.forEach(function (httpStatusCode) {
       responses[httpStatusCode] = {};
       responses[httpStatusCode].description = apiPath.resourceName + ' response';
-      responses[httpStatusCode].schema = {};
-      responses[httpStatusCode].schema.type = 'array';
-      responses[httpStatusCode].schema.items = {};
-      responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
+      // responses[httpStatusCode].schema = {};
+      // responses[httpStatusCode].schema.type = 'array';
+      // responses[httpStatusCode].schema.items = {};
+      // responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
     });
     httpOptions.responses = responses;
     inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = httpOptions;
