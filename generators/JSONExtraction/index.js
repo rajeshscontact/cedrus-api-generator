@@ -26,7 +26,9 @@ var promptMe = function (prompts, cb) {
       JSONFilePath: props.JSONFilePath,
       JSONSchema: schemaObj,
       isPublic: props.isPublic,
-      HTTPMethods: props.APIHttpMethods
+      HTTPMethods: props.APIHttpMethods,
+      requireFakeData: props.requireFakeData,
+      numberOfFakeRecords: props.numberOfFakeRecords
     };
     //
     // Push object of info to API array
@@ -95,6 +97,17 @@ module.exports = yeoman.Base.extend({
           checked: true
         }
       ]
+    }, {
+        name: 'requireFakeData',
+        type: 'confirm',
+        message: 'Would you like to have Fake Data for your API?'
+    }, {
+        when: function(response) {
+            return response.requireFakeData;
+        },
+        name: 'numberOfFakeRecords',
+        type: 'number',
+        message: 'How many records would you like to have?'
     }, {
       type: 'confirm',
       name: 'ContinueBoolean',
