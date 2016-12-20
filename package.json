@@ -18,6 +18,7 @@
   ],
   "dependencies": {
     "chalk": "^1.0.0",
+    "json-schema-generator": "^2.0.3",
     "write-yaml": "^0.2.2",
     "yamljs": "^0.2.8",
     "yeoman-generator": "^0.23.0",

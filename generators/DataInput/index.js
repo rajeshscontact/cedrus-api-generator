@@ -8,7 +8,7 @@ module.exports = yeoman.Base.extend({
       type: 'confirm',
       name: 'JSONAvailable',
       message: 'Do you have JSON object available to turn into your API?',
-      default: true
+      default: false
     }];
     return this.prompt(prompts).then(function (props) {
       console.log('props DataInput', props);

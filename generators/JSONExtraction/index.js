@@ -7,7 +7,7 @@ var apis = [];
 
 var promptMe = function (prompts, cb) {
   self.prompt(prompts).then(function (props) {
-    console.log('props JSON EXTRACTION', props);
+    //console.log('props JSON EXTRACTION', props);
     //
     // Extracting JSON Object from path
     //
@@ -48,11 +48,18 @@ module.exports = yeoman.Base.extend({
       type: 'input',
       name: 'resource',
       message: 'Name your resource.'
-    }, {
+    },
+    {
       type: 'input',
       name: 'JSONFilePath',
       message: 'Please provide the file path to your JSON Object.'
-    }, {
+    },
+    {
+      type: 'confirm',
+      name: 'make it public',
+      message: 'Would you like this resource to be public.'
+    },
+    {
       type: 'checkbox',
       name: 'APIHttpMethods',
       message: 'Which http methods you would like to generate:',
@@ -95,4 +102,3 @@ module.exports = yeoman.Base.extend({
     });
   }
 });
-
