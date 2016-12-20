@@ -14,7 +14,7 @@ module.exports = yeoman.Base.extend({
     console.log('START Swagger Gen');
   },
   writing: function () {
-    // this.copy('demo.yaml', 'swaggerConfig/demo.yaml');
+    // this.copy('input.yaml', 'swaggerConfig/input.yaml');
   },
   end: function () {
     runGen();
