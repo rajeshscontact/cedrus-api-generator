@@ -1,19 +1,22 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
+var jsonSchemaGenerator = require('json-schema-generator');
+var path = require('path');
 var self;
 var cb;
 var apis = [];
 
 var promptMe = function (prompts, cb) {
   self.prompt(prompts).then(function (props) {
-    //console.log('props JSON EXTRACTION', props);
+    // console.log('props JSON EXTRACTION', props);
     //
     // Extracting JSON Object from path
     //
-    // var content = fs.readFileSync(props.JSONFilePath);
-    // console.log('Type : \n' + typeof content);
-    // console.log('Output Content : \n' + content);
+    var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
+    var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
+    // console.log('Type : \n' + typeof contents);
+    // console.log('Output Content : \n' + contents);
     console.log('apis', apis);
     //
     // Create temp object to push to API array
@@ -21,7 +24,8 @@ var promptMe = function (prompts, cb) {
     var temp = {
       resourceName: props.resource,
       JSONFilePath: props.JSONFilePath,
-      // JSONObject: content,
+      JSONSchema: schemaObj,
+      isPublic: props.isPublic,
       HTTPMethods: props.APIHttpMethods
     };
     //
@@ -48,18 +52,19 @@ module.exports = yeoman.Base.extend({
       type: 'input',
       name: 'resource',
       message: 'Name your resource.'
-    },
-    {
+    }, {
       type: 'input',
       name: 'JSONFilePath',
       message: 'Please provide the file path to your JSON Object.'
-    },
-    {
+    }, {
       type: 'confirm',
-      name: 'make it public',
-      message: 'Would you like this resource to be public.'
-    },
-    {
+      name: 'isPublic',
+      message: 'Would you like this resource to be public?',
+      default: true
+    }, {
+      when: function (response) {
+        return response.isPublic;
+      },
       type: 'checkbox',
       name: 'APIHttpMethods',
       message: 'Which http methods you would like to generate:',
@@ -97,7 +102,7 @@ module.exports = yeoman.Base.extend({
     }];
 // Will ask questions about api until user is finished
     promptMe(prompts, function () {
-      console.log('doneeee');
+      console.log('done');
       cb();
     });
   }

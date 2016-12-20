@@ -2,8 +2,7 @@
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
 var path = require('path');
-var jsonSchemaGenerator = require('json-schema-generator');
-var httpStatusCodes = ['200', '404', '500'];
+var httpStatusCodes = ['204', '404', '500'];
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
@@ -39,7 +38,9 @@ var addHTTPCodes = function (options, cb) {
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
       addToDefinitions(inputJSON, apiPath);
-      addToPaths(inputJSON, options, apiPath);
+      if(apiPath.isPublic){
+        addToPaths(inputJSON, options, apiPath);
+      }
     });
     // /*
     // ** saving final json file for future references
@@ -57,13 +58,10 @@ var addHTTPCodes = function (options, cb) {
 /*
 ** This method converts provider json to schema object and adds to definitions
 */
-var addToDefinitions = function(inputJSON, apiPath){
-  var contents = fs.readFileSync(path.resolve(apiPath.JSONFilePath), 'utf8');
-  var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
+var addToDefinitions = function (inputJSON, apiPath) {
   inputJSON.definitions[apiPath.resourceName] = {};
-  inputJSON.definitions[apiPath.resourceName] = schemaObj;
-}
-
+  inputJSON.definitions[apiPath.resourceName] = apiPath.JSONSchema;
+};
 /*
 ** This method add's user selected paths with appropriate error codes
 */
@@ -87,6 +85,9 @@ var addToPaths = function (inputJSON, options, apiPath) {
     //
     var responses = {};
     httpStatusCodes.forEach(function (httpStatusCode) {
+      if (httpMethod === 'get' && httpStatusCode === '204') {
+        httpStatusCode = '200';
+      }
       responses[httpStatusCode] = {};
       responses[httpStatusCode].description = apiPath.resourceName + ' response';
       responses[httpStatusCode].schema = {};
