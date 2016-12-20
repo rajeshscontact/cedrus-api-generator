@@ -25,6 +25,7 @@ var promptMe = function (prompts, cb) {
       resourceName: props.resource,
       JSONFilePath: props.JSONFilePath,
       JSONSchema: schemaObj,
+      isPublic: props.isPublic,
       HTTPMethods: props.APIHttpMethods
     };
     //
