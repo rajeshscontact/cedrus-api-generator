@@ -54,18 +54,19 @@ var addHTTPCodes = function (options, cb) {
   });
 };
 
+/*
+** This method converts provider json to schema object and adds to definitions
+*/
 var addToDefinitions = function(inputJSON, apiPath){
   var contents = fs.readFileSync(path.resolve(apiPath.JSONFilePath), 'utf8');
   var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
   inputJSON.definitions[apiPath.resourceName] = {};
   inputJSON.definitions[apiPath.resourceName] = schemaObj;
-  /*fs.readFile(path.resolve(apiPath.JSONFilePath), 'utf8', function (error, jsonObj) {
-    var schemaObj = jsonSchemaGenerator(JSON.parse(jsonObj));
-    inputJSON.definitions[apiPath.resourceName] = {};
-    inputJSON.definitions[apiPath.resourceName] = schemaObj;
-  });*/
 }
 
+/*
+** This method add's user selected paths with appropriate error codes
+*/
 var addToPaths = function (inputJSON, options, apiPath) {
   if (inputJSON.paths === {} || typeof inputJSON.paths['/' + apiPath.resourceName + 's'] === 'undefined') {
     inputJSON.paths['/' + apiPath.resourceName + 's'] = {};
