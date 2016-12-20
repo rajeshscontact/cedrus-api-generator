@@ -38,7 +38,9 @@ var addHTTPCodes = function (options, cb) {
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
       addToDefinitions(inputJSON, apiPath);
-      addToPaths(inputJSON, options, apiPath);
+      if(apiPath.isPublic){
+        addToPaths(inputJSON, options, apiPath);
+      }
     });
     // /*
     // ** saving final json file for future references

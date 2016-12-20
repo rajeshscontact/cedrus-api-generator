@@ -27,24 +27,26 @@ var addParameters = function (options, cb) {
     var inputJSON = JSON.parse(jsonObj);
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
-      var outline = {
-        name: apiPath.resourceName,
-        in: 'body',
-        schema: apiPath.JSONSchema
-      };
-      //
-      // Adding parameters for Post if it exists
-      //
-      if (inputJSON.paths['/' + apiPath.resourceName + 's'].post) {
-        inputJSON.paths['/' + apiPath.resourceName + 's'].post.parameters = [];
-        inputJSON.paths['/' + apiPath.resourceName + 's'].post.parameters.push(outline);
-      }
-      //
-      // Adding parameters for Put if it exists
-      //
-      if (inputJSON.paths['/' + apiPath.resourceName + 's'].put) {
-        inputJSON.paths['/' + apiPath.resourceName + 's'].put.parameters = [];
-        inputJSON.paths['/' + apiPath.resourceName + 's'].put.parameters.push(outline);
+      if(apiPath.isPublic){
+        var outline = {
+          name: apiPath.resourceName,
+          in: 'body',
+          schema: apiPath.JSONSchema
+        };
+        //
+        // Adding parameters for Post if it exists
+        //
+        if (inputJSON.paths['/' + apiPath.resourceName + 's'].post) {
+          inputJSON.paths['/' + apiPath.resourceName + 's'].post.parameters = [];
+          inputJSON.paths['/' + apiPath.resourceName + 's'].post.parameters.push(outline);
+        }
+        //
+        // Adding parameters for Put if it exists
+        //
+        if (inputJSON.paths['/' + apiPath.resourceName + 's'].put) {
+          inputJSON.paths['/' + apiPath.resourceName + 's'].put.parameters = [];
+          inputJSON.paths['/' + apiPath.resourceName + 's'].put.parameters.push(outline);
+        }
       }
     });
      /*
