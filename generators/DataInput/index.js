@@ -8,7 +8,7 @@ module.exports = yeoman.Base.extend({
       type: 'confirm',
       name: 'JSONAvailable',
       message: 'Do you have JSON object available to turn into your API?',
-      default: false
+      default: true
     }];
     return this.prompt(prompts).then(function (props) {
       console.log('props DataInput', props);
@@ -17,9 +17,9 @@ module.exports = yeoman.Base.extend({
         this.composeWith('cedrus-api:JSONExtraction');
         this.composeWith('cedrus-api:JSONInput');
         this.composeWith('cedrus-api:HTTPStatusCodes');
+        this.composeWith('cedrus-api:AddParameters');
         this.composeWith('cedrus-api:CreateYaml');
         this.composeWith('cedrus-api:StartSwaggerGen');
-        
       } else {
         this.composeWith('cedrus-api:CreateYaml');
         this.composeWith('cedrus-api:StartSwaggerGen');
