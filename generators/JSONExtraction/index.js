@@ -54,11 +54,27 @@ module.exports = yeoman.Base.extend({
     var prompts = [{
       type: 'input',
       name: 'resource',
-      message: 'Name your resource.'
+      message: 'Name your resource.',
+      validate: function(input){
+        if(input.length === 0){
+          return "Please enter Name of your Resource!";
+        }else{
+          var done = this.async();
+          done(null, true);
+        }
+      }
     }, {
       type: 'input',
       name: 'JSONFilePath',
-      message: 'Please provide the file path to your JSON Object.'
+      message: 'Please provide the file path to your JSON Object.',
+      validate: function(input){
+        if(input.length === 0){
+          return "Please enter Path of your Resource!";
+        }else{
+          var done = this.async();
+          done(null, true);
+        }
+      }
     }, {
       type: 'confirm',
       name: 'isPublic',
