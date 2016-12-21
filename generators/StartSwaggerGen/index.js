@@ -5,6 +5,8 @@ var path = require('path');
 var jsYaml = require('js-yaml');
 var request = require('request');
 var unzip = require('unzip2');
+var ncp = require('ncp').ncp;
+var del = require('del');
 
 var codeGenEndpoint = 'http://generator.swagger.io/api/gen/servers';
 var language = 'nodejs-server';
@@ -60,7 +62,16 @@ var runGen = function () {
       request({
         url: responseObj.link,
         encoding: null
-      }).pipe(unzip.Extract({path: '.'}));
+      }).pipe(unzip.Extract({path: '.'}))
+        .on('close', function(){
+          ncp.limit = 16;
+          ncp('./nodejs-server-server', './', function (err) {
+            if (err) {
+              return console.error(err);
+            }
+            del.sync(['./nodejs-server-server']);
+          });
+        });
     });
   });
 };
