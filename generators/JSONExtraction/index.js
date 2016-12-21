@@ -15,6 +15,7 @@ var promptMe = function (prompts, cb) {
     //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
     var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
+    delete schemaObj['$schema'];
     // console.log('Type : \n' + typeof contents);
     // console.log('Output Content : \n' + contents);
     //console.log('apis', apis);

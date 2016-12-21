@@ -31,7 +31,9 @@ var addParameters = function (options, cb) {
         var outline = {
           name: apiPath.resourceName,
           in: 'body',
-          schema: apiPath.JSONSchema
+          schema: {
+            $ref : '#/definitions/' + apiPath.resourceName
+          }
         };
         //
         // Adding parameters for Post if it exists
