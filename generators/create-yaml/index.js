@@ -11,7 +11,6 @@ module.exports = yeoman.Base.extend({
   end: function () {
     var cb = this.async();
     createYamlJson(cb);
-    // this.composeWith('cedrus-api:StartSwaggerGen');
   }
 });
 
