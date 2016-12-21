@@ -92,9 +92,13 @@ var addToPaths = function (inputJSON, options, apiPath) {
       responses[httpStatusCode] = {};
       responses[httpStatusCode].description = apiPath.resourceName + ' response';
       responses[httpStatusCode].schema = {};
-      responses[httpStatusCode].schema.type = 'array';
-      responses[httpStatusCode].schema.items = {};
-      responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
+      if (httpStatusCode === '200' || httpStatusCode === '204') {
+        responses[httpStatusCode].schema.type = 'array';
+        responses[httpStatusCode].schema.items = {};
+        responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
+      }else{
+          responses[httpStatusCode].schema.type = 'object';
+      }
     });
     httpOptions.responses = responses;
     inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = httpOptions;
