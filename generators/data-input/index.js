@@ -20,7 +20,7 @@ module.exports = yeoman.Base.extend({
         this.composeWith('cedrus-api:add-parameters');
         this.composeWith('cedrus-api:create-yaml');
         this.composeWith('cedrus-api:start-swagger-gen');
-        this.composeWith('cedrus-api:fake-data');
+        this.composeWith('cedrus-api:fake-data', {options: {runningThrough: 'generator'}});
       } else {
         this.composeWith('cedrus-api:create-yaml');
         this.composeWith('cedrus-api:start-swagger-gen');
