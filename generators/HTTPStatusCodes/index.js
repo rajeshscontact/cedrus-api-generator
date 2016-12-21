@@ -76,6 +76,7 @@ var addToPaths = function (inputJSON, options, apiPath) {
   httpMethods.forEach(function (httpMethod) {
     inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = {};
     var httpOptions = {};
+    httpOptions.tags = [capitalizeFirstLetter(apiPath.resourceName)];
     httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + apiPath.resourceName + 's from the system that the user has access to';
     httpOptions.operationId = httpMethod + capitalizeFirstLetter(apiPath.resourceName);
     httpOptions.produces = options.APIOverviewProps.APIProduces;
