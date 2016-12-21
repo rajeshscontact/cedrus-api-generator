@@ -82,6 +82,5 @@ module.exports = yeoman.Base.extend({
 
   install: function () {
     this.config.save();
-    // this.installDependencies();
   }
 });

@@ -10,7 +10,7 @@ module.exports = yeoman.Base.extend({
   },
   end: function () {
     var cb = this.async();
-    //console.log('options', this.config.getAll());
+    // console.log('options', this.config.getAll());
     var configOptions = this.config.getAll();
     addHTTPCodes(configOptions, cb);
   }
@@ -33,12 +33,12 @@ var addHTTPCodes = function (options, cb) {
     if (error) {
       throw error;
     }
-    //console.log('WE MADE IT', options);
+    // console.log('WE MADE IT', options);
     var inputJSON = JSON.parse(jsonObj);
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
       addToDefinitions(inputJSON, apiPath);
-      if(apiPath.isPublic){
+      if (apiPath.isPublic) {
         addToPaths(inputJSON, options, apiPath);
       }
     });

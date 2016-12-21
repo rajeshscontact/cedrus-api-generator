@@ -19,11 +19,13 @@ module.exports = yeoman.Base.extend({
     // this.copy('input.yaml', 'swaggerConfig/input.yaml');
   },
   end: function () {
-    runGen();
+    var cb = this.async();
+    runGen(cb);
+    this.npmInstall();
   }
 });
 
-var runGen = function () {
+var runGen = function (cb) {
   fs.readFile(path.resolve('swaggerConfig/input.yaml'), 'utf8', function (error, yaml) {
     if (error) {
       throw error;
@@ -70,6 +72,7 @@ var runGen = function () {
               return console.error(err);
             }
             del(['./nodejs-server-server']);
+            cb();
           });
         });
     });
