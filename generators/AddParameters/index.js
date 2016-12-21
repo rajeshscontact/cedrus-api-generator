@@ -9,7 +9,7 @@ module.exports = yeoman.Base.extend({
   },
   end: function () {
     var cb = this.async();
-    console.log('options', this.config.getAll());
+    //console.log('options', this.config.getAll());
     var configOptions = this.config.getAll();
     addParameters(configOptions, cb);
   }
@@ -23,7 +23,7 @@ var addParameters = function (options, cb) {
     if (error) {
       throw error;
     }
-    console.log('Adding parameters options', options);
+    //console.log('Adding parameters options', options);
     var inputJSON = JSON.parse(jsonObj);
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {

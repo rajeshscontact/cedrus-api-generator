@@ -17,7 +17,7 @@ var promptMe = function (prompts, cb) {
     var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
     // console.log('Type : \n' + typeof contents);
     // console.log('Output Content : \n' + contents);
-    console.log('apis', apis);
+    //console.log('apis', apis);
     //
     // Create temp object to push to API array
     //
