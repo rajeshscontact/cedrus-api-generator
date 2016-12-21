@@ -69,7 +69,7 @@ var runGen = function () {
             if (err) {
               return console.error(err);
             }
-            //del(['./nodejs-server-server']);
+            del(['./nodejs-server-server']);
           });
         });
     });
