@@ -15,10 +15,10 @@ var promptMe = function (prompts, cb) {
     //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
     var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
-    delete schemaObj['$schema'];
+    delete schemaObj.$schema;
     // console.log('Type : \n' + typeof contents);
     // console.log('Output Content : \n' + contents);
-    //console.log('apis', apis);
+    // console.log('apis', apis);
     //
     // Create temp object to push to API array
     //
@@ -55,10 +55,10 @@ module.exports = yeoman.Base.extend({
       type: 'input',
       name: 'resource',
       message: 'Name your resource.',
-      validate: function(input){
-        if(input.length === 0){
-          return "Please enter Name of your Resource!";
-        }else{
+      validate: function (input) {
+        if (input.length === 0) {
+          return 'Please enter Name of your Resource!';
+        } else {
           var done = this.async();
           done(null, true);
         }
@@ -67,10 +67,10 @@ module.exports = yeoman.Base.extend({
       type: 'input',
       name: 'JSONFilePath',
       message: 'Please provide the file path to your JSON Object.',
-      validate: function(input){
-        if(input.length === 0){
-          return "Please enter Path of your Resource!";
-        }else{
+      validate: function (input) {
+        if (input.length === 0) {
+          return 'Please enter Path of your Resource!';
+        } else {
           var done = this.async();
           done(null, true);
         }
@@ -115,16 +115,16 @@ module.exports = yeoman.Base.extend({
         }
       ]
     }, {
-        name: 'requireFakeData',
-        type: 'confirm',
-        message: 'Would you like to have Fake Data for your API?'
+      name: 'requireFakeData',
+      type: 'confirm',
+      message: 'Would you like to have Fake Data for your API?'
     }, {
-        when: function(response) {
-            return response.requireFakeData;
-        },
-        name: 'numberOfFakeRecords',
-        type: 'number',
-        message: 'How many records would you like to have?'
+      when: function (response) {
+        return response.requireFakeData;
+      },
+      name: 'numberOfFakeRecords',
+      type: 'number',
+      message: 'How many records would you like to have?'
     }, {
       type: 'confirm',
       name: 'ContinueBoolean',

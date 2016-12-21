@@ -96,8 +96,8 @@ var addToPaths = function (inputJSON, options, apiPath) {
         responses[httpStatusCode].schema.type = 'array';
         responses[httpStatusCode].schema.items = {};
         responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
-      }else{
-          responses[httpStatusCode].schema.type = 'object';
+      } else {
+        responses[httpStatusCode].schema.type = 'object';
       }
     });
     httpOptions.responses = responses;

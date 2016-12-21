@@ -59,13 +59,13 @@ var runGen = function (cb) {
 
       var responseObj = JSON.parse(body);
 
-      //console.log('response', responseObj);
+      // console.log('response', responseObj);
 
       request({
         url: responseObj.link,
         encoding: null
       }).pipe(unzip.Extract({path: '.'}))
-        .on('close', function(){
+        .on('close', function () {
           ncp.limit = 16;
           ncp('./nodejs-server-server', './', function (err) {
             if (err) {
