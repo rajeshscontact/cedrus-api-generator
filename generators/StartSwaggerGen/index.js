@@ -57,7 +57,7 @@ var runGen = function () {
 
       var responseObj = JSON.parse(body);
 
-      console.log('response', responseObj);
+      //console.log('response', responseObj);
 
       request({
         url: responseObj.link,
@@ -69,7 +69,7 @@ var runGen = function () {
             if (err) {
               return console.error(err);
             }
-            del.sync(['./nodejs-server-server']);
+            //del(['./nodejs-server-server']);
           });
         });
     });

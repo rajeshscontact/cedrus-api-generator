@@ -12,7 +12,7 @@ module.exports = yeoman.Base.extend({
   },
   end: function () {
     var cb = this.async();
-    console.log('options INPUT', this.config.getAll());
+    //console.log('options INPUT', this.config.getAll());
     var configOptions = this.config.getAll();
     createJsonInput(configOptions, cb);
   }
