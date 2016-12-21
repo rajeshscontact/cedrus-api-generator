@@ -11,7 +11,7 @@ module.exports = yeoman.Base.extend({
       default: true
     }];
     return this.prompt(prompts).then(function (props) {
-      //console.log('props DataInput', props);
+      // console.log('props DataInput', props);
       this.config.set({DataInput: props});
       if (props.JSONAvailable) {
         this.composeWith('cedrus-api:JSONExtraction');
