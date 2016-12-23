@@ -6,7 +6,7 @@ var jsonSchemaFaker = require('json-schema-faker');
 module.exports = yeoman.Base.extend({
   prompting: function () {
     var runningThrough = this.options.runningThrough;
-    if(typeof runningThrough === 'undefined'){
+    if (typeof runningThrough === 'undefined') {
       var availableResourceList = [];
       var apiPaths = this.config.getAll().JSONExtraction;
       apiPaths.forEach(function (apiPath) {
@@ -29,18 +29,18 @@ module.exports = yeoman.Base.extend({
       }];
 
       return this.prompt(prompts).then(function (props) {
-        //console.log('props APP', props);
-        createJson(props.selectedResource.name, props.numberOfFakeRecords, props.selectedResource.schema)
-      }.bind(this));
+        // console.log('props APP', props);
+        createJson(props.selectedResource.name, props.numberOfFakeRecords, props.selectedResource.schema);
+      });
     }
   },
   end: function () {
     var cb = this.async();
     var runningThrough = this.options.runningThrough;
     var configOptions = this.config.getAll();
-    if(runningThrough === 'generator'){
+    if (runningThrough === 'generator') {
       createFakeData(configOptions, cb);
-    }else{
+    } else {
       cb();
     }
   }
@@ -56,7 +56,7 @@ var createFakeData = function (options, cb) {
   cb();
 };
 
-var createJson = function(resourceName, numberOfRecords, schemaObj){
+var createJson = function (resourceName, numberOfRecords, schemaObj) {
   var inputJSONArray = [];
   for (var i = 0; i < numberOfRecords; i++) {
     var inputJSON = jsonSchemaFaker(schemaObj);
@@ -73,4 +73,4 @@ var createJson = function(resourceName, numberOfRecords, schemaObj){
       });
     }
   }
-}
+};
