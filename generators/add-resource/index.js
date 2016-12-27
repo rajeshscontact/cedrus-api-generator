@@ -116,6 +116,7 @@ module.exports = yeoman.Base.extend({
   },
   end: function(){
     var cb = this.async();
+    cb();
   }
 });
 
