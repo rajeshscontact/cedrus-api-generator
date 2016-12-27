@@ -9,19 +9,19 @@ var apis = [];
 
 var promptMe = function (prompts, cb) {
   self.prompt(prompts).then(function (props) {
-    // console.log('props JSON EXTRACTION', props);
-    //
-    // Extracting JSON Object from path
-    //
+        // console.log('props JSON EXTRACTION', props);
+        //
+        // Extracting JSON Object from path
+        //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
     var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
     delete schemaObj.$schema;
-    // console.log('Type : \n' + typeof contents);
-    // console.log('Output Content : \n' + contents);
-    // console.log('apis', apis);
-    //
-    // Create temp object to push to API array
-    //
+        // console.log('Type : \n' + typeof contents);
+        // console.log('Output Content : \n' + contents);
+        // console.log('apis', apis);
+        //
+        // Create temp object to push to API array
+        //
     var temp = {
       resourceName: props.resource,
       JSONFilePath: props.JSONFilePath,
@@ -29,15 +29,17 @@ var promptMe = function (prompts, cb) {
       isPublic: props.isPublic,
       HTTPMethods: props.APIHttpMethods,
       requireFakeData: props.requireFakeData,
-      numberOfFakeRecords: props.numberOfFakeRecords
+      numberOfFakeRecords: props.numberOfFakeRecords,
+      requireQuery: props.requireQuery,
+      whichParameter: props.whichParameter
     };
-    //
-    // Push object of info to API array
-    //
+        //
+        // Push object of info to API array
+        //
     apis.push(temp);
-    //
-    // If client has more resources continue asking questions if not save and break
-    //
+        //
+        // If client has more resources continue asking questions if not save and break
+        //
     if (props.ContinueBoolean) {
       promptMe(prompts, cb);
     } else {
@@ -87,12 +89,11 @@ module.exports = yeoman.Base.extend({
       type: 'checkbox',
       name: 'APIHttpMethods',
       message: 'Which http methods you would like to generate:',
-      choices: [
-        {
-          name: 'GET',
-          value: 'get',
-          checked: true
-        },
+      choices: [{
+        name: 'GET',
+        value: 'get',
+        checked: true
+      },
         {
           name: 'POST',
           value: 'post',
@@ -126,11 +127,22 @@ module.exports = yeoman.Base.extend({
       type: 'number',
       message: 'How many records would you like to have?'
     }, {
+      name: 'requireQuery',
+      type: 'confirm',
+      message: 'Would you like to query this API?'
+    }, {
+      when: function (response) {
+        return response.requireQuery;
+      },
+      name: 'whichParameter',
+      type: 'input',
+      message: 'By which parameter?'
+    }, {
       type: 'confirm',
       name: 'ContinueBoolean',
       message: 'Do you have more resources?'
     }];
-// Will ask questions about api until user is finished
+        // Will ask questions about api until user is finished
     promptMe(prompts, function () {
       console.log('done');
       cb();
