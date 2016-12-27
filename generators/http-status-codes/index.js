@@ -80,6 +80,7 @@ var addToPaths = function (inputJSON, options, apiPath) {
     httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + apiPath.resourceName + 's from the system that the user has access to';
     httpOptions.operationId = httpMethod + capitalizeFirstLetter(apiPath.resourceName);
     httpOptions.produces = options.APIOverviewProps.APIProduces;
+    httpOptions['x-swagger-router-controller'] = capitalizeFirstLetter(apiPath.resourceName);
     httpOptions.responses = {};
     //
     // Adding HTTP Response Code
