@@ -40,6 +40,9 @@ module.exports = yeoman.Base.extend({
     var configOptions = this.config.getAll();
     if (runningThrough === 'generator') {
       createFakeData(configOptions, cb);
+    } else if (runningThrough === 'AddResource') {
+      createJson(configOptions.addResource.resourceName, configOptions.addResource.numberOfFakeRecords, configOptions.addResource.JSONSchema);
+      //createFakeData(configOptions, cb);
     } else {
       cb();
     }
@@ -65,7 +68,7 @@ var createJson = function (resourceName, numberOfRecords, schemaObj) {
       if (!fs.existsSync('./sampleData')) {
         fs.mkdirSync('./sampleData');
       }
-      fs.writeFile('./sampleData/' + resourceName + '.json', JSON.stringify(inputJSONArray), function (err) {
+      fs.writeFile('./sampleData/' + capitalizeFirstLetter(resourceName) + '.json', JSON.stringify(inputJSONArray), function (err) {
         if (err) {
           return console.log(err);
         }
@@ -73,4 +76,8 @@ var createJson = function (resourceName, numberOfRecords, schemaObj) {
       });
     }
   }
+};
+
+var capitalizeFirstLetter = function (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 };
