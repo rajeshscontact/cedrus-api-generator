@@ -10,9 +10,17 @@ module.exports = yeoman.Base.extend({
   },
   end: function () {
     var cb = this.async();
-    // console.log('options', this.config.getAll());
+    var runningThrough = this.options.runningThrough;
     var configOptions = this.config.getAll();
-    addHTTPCodes(configOptions, cb);
+    if (runningThrough === 'generator') {
+      // console.log('options', this.config.getAll());
+      addHTTPCodes(configOptions, false, cb);
+    }else if (runningThrough === 'AddResource') {
+      //createJson(configOptions.addResource.resourceName, configOptions.addResource.numberOfFakeRecords, configOptions.addResource.JSONSchema);
+      addHTTPCodes(configOptions, true, cb);
+    } else {
+      cb();
+    }
   }
 });
 
@@ -25,7 +33,7 @@ var capitalizeFirstLetter = function (string) {
 //
 // JOB HANDELING FUNCTIONS
 //
-var addHTTPCodes = function (options, cb) {
+var addHTTPCodes = function (options, isAddResource, cb) {
   /*
   **  Reading the copied json file and adding the required paramaters
   */
@@ -35,13 +43,20 @@ var addHTTPCodes = function (options, cb) {
     }
     // console.log('WE MADE IT', options);
     var inputJSON = JSON.parse(jsonObj);
-    var apiPaths = options.JSONExtraction;
-    apiPaths.forEach(function (apiPath) {
-      addToDefinitions(inputJSON, apiPath);
-      if (apiPath.isPublic) {
-        addToPaths(inputJSON, options, apiPath);
+    if(isAddResource){
+      addToDefinitions(inputJSON, options.addResource.resourceName, options.addResource.JSONSchema);
+      if (options.addResource.isPublic) {
+        addToPaths(inputJSON, options.APIOverviewProps.APIProduces, options.addResource.APIHttpMethods, options.addResource.resourceName);
       }
-    });
+    }else{
+      var apiPaths = options.JSONExtraction;
+      apiPaths.forEach(function (apiPath) {
+        addToDefinitions(inputJSON, apiPath.resourceName, apiPath.JSONSchema);
+        if (apiPath.isPublic) {
+          addToPaths(inputJSON, options.APIOverviewProps.APIProduces, apiPath.HTTPMethods, apiPath.resourceName);
+        }
+      });
+    }
     // /*
     // ** saving final json file for future references
     // */
@@ -58,29 +73,29 @@ var addHTTPCodes = function (options, cb) {
 /*
 ** This method converts provider json to schema object and adds to definitions
 */
-var addToDefinitions = function (inputJSON, apiPath) {
-  inputJSON.definitions[apiPath.resourceName] = {};
-  inputJSON.definitions[apiPath.resourceName] = apiPath.JSONSchema;
+var addToDefinitions = function (inputJSON, resourceName, schemaObj) {
+  inputJSON.definitions[resourceName] = {};
+  inputJSON.definitions[resourceName] = schemaObj;
 };
 /*
 ** This method add's user selected paths with appropriate error codes
 */
-var addToPaths = function (inputJSON, options, apiPath) {
-  if (inputJSON.paths === {} || typeof inputJSON.paths['/' + apiPath.resourceName + 's'] === 'undefined') {
-    inputJSON.paths['/' + apiPath.resourceName + 's'] = {};
+var addToPaths = function (inputJSON, apiProduces, httpMethodList, resourceName) {
+  if (inputJSON.paths === {} || typeof inputJSON.paths['/' + resourceName + 's'] === 'undefined') {
+    inputJSON.paths['/' + resourceName + 's'] = {};
   }
   //
   // For each httpMethod
   //
-  var httpMethods = apiPath.HTTPMethods;
+  var httpMethods = httpMethodList;
   httpMethods.forEach(function (httpMethod) {
-    inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = {};
+    inputJSON.paths['/' + resourceName + 's'][httpMethod] = {};
     var httpOptions = {};
-    httpOptions.tags = [capitalizeFirstLetter(apiPath.resourceName)];
-    httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + apiPath.resourceName + 's from the system that the user has access to';
-    httpOptions.operationId = httpMethod + capitalizeFirstLetter(apiPath.resourceName);
-    httpOptions.produces = options.APIOverviewProps.APIProduces;
-    httpOptions['x-swagger-router-controller'] = capitalizeFirstLetter(apiPath.resourceName);
+    httpOptions.tags = [capitalizeFirstLetter(resourceName)];
+    httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + resourceName + 's from the system that the user has access to';
+    httpOptions.operationId = httpMethod + capitalizeFirstLetter(resourceName);
+    httpOptions.produces = apiProduces;
+    httpOptions['x-swagger-router-controller'] = capitalizeFirstLetter(resourceName);
     httpOptions.responses = {};
     //
     // Adding HTTP Response Code
@@ -91,17 +106,17 @@ var addToPaths = function (inputJSON, options, apiPath) {
         httpStatusCode = '200';
       }
       responses[httpStatusCode] = {};
-      responses[httpStatusCode].description = apiPath.resourceName + ' response';
+      responses[httpStatusCode].description = resourceName + ' response';
       responses[httpStatusCode].schema = {};
       if (httpStatusCode === '200' || httpStatusCode === '204') {
         responses[httpStatusCode].schema.type = 'array';
         responses[httpStatusCode].schema.items = {};
-        responses[httpStatusCode].schema.items.$ref = '#/definitions/' + apiPath.resourceName;
+        responses[httpStatusCode].schema.items.$ref = '#/definitions/' + resourceName;
       } else {
         responses[httpStatusCode].schema.type = 'object';
       }
     });
     httpOptions.responses = responses;
-    inputJSON.paths['/' + apiPath.resourceName + 's'][httpMethod] = httpOptions;
+    inputJSON.paths['/' + resourceName + 's'][httpMethod] = httpOptions;
   });
 };
