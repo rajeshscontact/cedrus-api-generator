@@ -2,6 +2,9 @@
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
+var fs = require('fs');
+var path = require('path');
+var writeYaml = require('write-yaml');
 
 module.exports = yeoman.Base.extend({
 
@@ -39,6 +42,37 @@ module.exports = yeoman.Base.extend({
     };
     this.template("manifest.yml", "manifest.yml", context);
     this.copy(".cfignore", ".cfignore");
+  },
+  end: function(){
+    var cb=this.async();
+    updateYamlForBluemix(cb);
   }
 
  });
+
+var updateYamlForBluemix = function(cb){
+  fs.readFile(path.resolve('swaggerConfig/input.json'), 'utf8', function (error, jsonObj) {
+    if (error) {
+      cb(error);
+    }
+    var inputJSON = JSON.parse(jsonObj);
+    inputJSON.host = '$(catalog.host)';
+    fs.writeFile('swaggerConfig/input.json', JSON.stringify(inputJSON), function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log('The Json file is saved!');
+    /*
+    **  Creating the Yaml file from the json
+    */
+      writeYaml('swaggerConfig/input.yaml', inputJSON, function (err) {
+        if (err) {
+          return console.log(err);
+        }
+        console.log('The Yaml file is saved!');
+        cb();
+      });
+    });
+  });
+
+}
