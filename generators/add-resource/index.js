@@ -88,6 +88,7 @@ module.exports = yeoman.Base.extend({
       this.props = props;
       this.config.set({addResource: props});
       this.composeWith('cedrus-api:http-status-codes', {options: {runningThrough: 'AddResource'}});
+      this.composeWith('cedrus-api:create-yaml');
       if(props.requireFakeData){
         this.composeWith('cedrus-api:fake-data', {options: {runningThrough: 'AddResource'}});
       }

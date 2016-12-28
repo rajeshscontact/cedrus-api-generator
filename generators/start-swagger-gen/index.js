@@ -21,6 +21,10 @@ module.exports = yeoman.Base.extend({
   end: function () {
     var cb = this.async();
     runGen(cb);
+    this.fs.copyTpl(
+      this.templatePath('index.js'),
+      this.destinationPath('./index.js')
+    );
     this.npmInstall();
   }
 });
@@ -69,10 +73,12 @@ var runGen = function (cb) {
           ncp.limit = 16;
           ncp('./nodejs-server-server', './', function (err) {
             if (err) {
-              return console.error(err);
+              return cb(err);
             }
-            del(['./nodejs-server-server']);
-            cb();
+            del(['./nodejs-server-server', './*index.js'], {force: true}).then(paths => {
+              console.log('Files and folders that would be deleted:\n', paths.join('\n'));
+              cb();
+            });
           });
         });
     });
