@@ -56,6 +56,10 @@ var updateYamlForBluemix = function(cb){
       cb(error);
     }
     var inputJSON = JSON.parse(jsonObj);
+    var index = inputJSON.schemes.indexOf('http');
+    if (index > -1) {
+      inputJSON.schemes.splice(index, 1);
+    }
     inputJSON.host = '$(catalog.host)';
     fs.writeFile('swaggerConfig/input.json', JSON.stringify(inputJSON), function (err) {
       if (err) {
