@@ -55,7 +55,7 @@ var addHTTPCodes = function (options, cb) {
     /*
     **  Creating the Yaml file from the json
     */
-      writeYaml('api/swagger.yaml', inputJSON, function (err) {
+      writeYaml('swaggerConfig/input.yaml', inputJSON, function (err) {
         if (err) {
           return console.log(err);
         }
@@ -89,6 +89,14 @@ var addToPaths = function (inputJSON, options, fromRelationship, toRelationship)
     httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + toRelationship + ' from ' + fromRelationship + ' from the system that the user has access to';
     httpOptions.operationId = httpMethod + capitalizeFirstLetter(toRelationship) + 's';
     httpOptions.produces = options.APIOverviewProps.APIProduces;
+    httpOptions.parameters = [];
+    var outline = {
+      name: 'id',
+      in: 'path',
+      type: 'string',
+      required: true
+    };
+    httpOptions.parameters.push(outline);
     httpOptions.responses = {};
     //
     // Adding HTTP Response Code
