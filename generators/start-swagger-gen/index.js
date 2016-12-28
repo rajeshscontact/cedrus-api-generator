@@ -75,7 +75,7 @@ var runGen = function (cb) {
             if (err) {
               return cb(err);
             }
-            del(['./nodejs-server-server', './*index.js'], {force: true}).then(paths => {
+            del(['./nodejs-server-server', './api', './*index.js'], {force: true}).then(paths => {
               console.log('Files and folders that would be deleted:\n', paths.join('\n'));
               cb();
             });
