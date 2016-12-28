@@ -68,7 +68,7 @@
 		"assembly": {
 			"execute": [{
 				"invoke": {
-					"target-url": "$(runtime-url)$(request.path)?language=$(request.parameters.language)",
+					"target-url": "$(runtime-url)$(request.path)$(request.search)",
 					"tls-profile": "",
 					"secure-gateway": false
 				}
