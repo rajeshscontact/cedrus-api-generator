@@ -26,6 +26,7 @@ module.exports = yeoman.Base.extend({
       this.destinationPath('./index.js')
     );
     this.npmInstall();
+    this.composeWith('cedrus-api:copy-controllers');
   }
 });
 
