@@ -42,15 +42,13 @@ module.exports = yeoman.Base.extend({
     };
     this.template("manifest.yml", "manifest.yml", context);
     this.copy(".cfignore", ".cfignore");
-  },
-  end: function(){
     var cb=this.async();
-    updateYamlForBluemix(cb);
+    updateYamlForBluemix(this.appName, cb);
   }
 
  });
 
-var updateYamlForBluemix = function(cb){
+var updateYamlForBluemix = function(appName, cb){
   fs.readFile(path.resolve('swaggerConfig/input.json'), 'utf8', function (error, jsonObj) {
     if (error) {
       cb(error);
@@ -61,6 +59,8 @@ var updateYamlForBluemix = function(cb){
       inputJSON.schemes.splice(index, 1);
     }
     inputJSON.host = '$(catalog.host)';
+    inputJSON['x-ibm-configuration'].assembly.execute[0].invoke['target-url'] = 'https://'+appName+'.mybluemix.net$(request.path)$(request.search)';
+    console.log('+++++++++++++++++++++++++++++++++++++++++++', inputJSON['x-ibm-configuration'].assembly.execute[0].invoke['target-url']);
     fs.writeFile('swaggerConfig/input.json', JSON.stringify(inputJSON), function (err) {
       if (err) {
         return console.log(err);
