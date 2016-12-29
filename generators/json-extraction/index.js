@@ -56,10 +56,10 @@ module.exports = yeoman.Base.extend({
     var prompts = [{
       type: 'input',
       name: 'resource',
-      message: 'Name your resource.',
+      message: 'Enter name of your resource?',
       validate: function (input) {
         if (input.length === 0) {
-          return 'Please enter Name of your Resource!';
+          return 'You forgot to enter resource name!!!';
         } else {
           var done = this.async();
           done(null, true);
@@ -68,10 +68,10 @@ module.exports = yeoman.Base.extend({
     }, {
       type: 'input',
       name: 'JSONFilePath',
-      message: 'Please provide the file path to your JSON Object.',
+      message: 'Enter path of your resource?',
       validate: function (input) {
         if (input.length === 0) {
-          return 'Please enter Path of your Resource!';
+          return 'You forgot to enter resource location!!!';
         } else {
           var done = this.async();
           done(null, true);
@@ -88,7 +88,7 @@ module.exports = yeoman.Base.extend({
       },
       type: 'checkbox',
       name: 'APIHttpMethods',
-      message: 'Which http methods you would like to generate:',
+      message: 'Which http methods you would like to generate?',
       choices: [{
         name: 'GET',
         value: 'get',
@@ -118,14 +118,14 @@ module.exports = yeoman.Base.extend({
     }, {
       name: 'requireFakeData',
       type: 'confirm',
-      message: 'Would you like to have Fake Data for your API?'
+      message: 'Would you like to have test data for your API?'
     }, {
       when: function (response) {
         return response.requireFakeData;
       },
       name: 'numberOfFakeRecords',
       type: 'number',
-      message: 'How many records would you like to have?'
+      message: 'How many records of test data would you like to have?'
     }, {
       name: 'requireQuery',
       type: 'confirm',

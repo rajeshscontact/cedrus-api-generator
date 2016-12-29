@@ -16,14 +16,22 @@ module.exports = yeoman.Base.extend({
     }, {
       type: 'input',
       name: 'resourceName',
-      message: 'Name of resource?'
+      message: 'Enter name of your resource?',
+      validate: function (input) {
+        if (input.length === 0) {
+          return 'You forgot to enter resource name!!!';
+        } else {
+          var done = this.async();
+          done(null, true);
+        }
+      }
     }, {
       type: 'input',
       name: 'JSONFilePath',
-      message: 'Please provide the file path to your JSON Object.',
+      message: 'Enter path of your resource?',
       validate: function (input) {
         if (input.length === 0) {
-          return 'Please enter Path of your Resource!';
+          return 'You forgot to enter resource location!!!';
         } else {
           var done = this.async();
           done(null, true);
