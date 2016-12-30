@@ -1,7 +1,7 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
-var jsonSchemaGenerator = require('json-schema-generator');
+var GenerateSchema = require('generate-schema');
 var path = require('path');
 var self;
 var cb;
@@ -14,7 +14,7 @@ var promptMe = function (prompts, cb) {
         // Extracting JSON Object from path
         //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
-    var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
+    var schemaObj = GenerateSchema.json(props.resource, [JSON.parse(contents)]);
     delete schemaObj.$schema;
         // console.log('Type : \n' + typeof contents);
         // console.log('Output Content : \n' + contents);

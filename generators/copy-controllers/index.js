@@ -1,8 +1,5 @@
 'use strict';
 var yeoman = require('yeoman-generator');
-var jsonSchemaGenerator = require('json-schema-generator');
-var fs = require('fs');
-var path = require('path');
 var del = require('del');
 
 module.exports = yeoman.Base.extend({

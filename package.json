@@ -19,8 +19,8 @@
   "dependencies": {
     "chalk": "^1.0.0",
     "del": "^2.2.2",
+    "generate-schema": "^2.3.1",
     "json-schema-faker": "^0.4.0",
-    "json-schema-generator": "^2.0.3",
     "ncp": "^2.0.0",
     "write-yaml": "^0.2.2",
     "yamljs": "^0.2.8",
