@@ -3,12 +3,20 @@ var yeoman = require('yeoman-generator');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('DATA INPUT');
+    // console.log('DATA INPUT');
     var prompts = [{
       type: 'confirm',
       name: 'JSONAvailable',
       message: 'Do you have JSON object available to turn into your API?',
       default: true
+    }, {
+      when: function (response) {
+        return response.JSONAvailable;
+      },
+      name: 'dataType',
+      message: 'Do you have a Data Object or a Data Schema?',
+      type: 'list',
+      choices: ['Data Object', 'Data Schema']
     }];
     return this.prompt(prompts).then(function (props) {
       // console.log('props DataInput', props);

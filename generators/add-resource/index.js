@@ -1,18 +1,27 @@
 'use strict';
 var yeoman = require('yeoman-generator');
-var jsonSchemaGenerator = require('json-schema-generator');
+var GenerateSchema = require('generate-schema');
 var fs = require('fs');
 var path = require('path');
+var schemaObj;
 
 module.exports = yeoman.Base.extend({
-  prompting: function() {
+  prompting: function () {
     var done = this.async();
     var prompts = [{
       type: 'confirm',
       name: 'JSONAvailable',
       message: 'Do you have JSON object available to turn into your API?',
-      //Defaults to the project's folder name if the input is skipped
+      // Defaults to the project's folder name if the input is skipped
       default: true
+    }, {
+      when: function (response) {
+        return response.JSONAvailable;
+      },
+      name: 'dataType',
+      message: 'Do you have a Data Object or a Data Schema?',
+      type: 'list',
+      choices: ['Data Object', 'Data Schema']
     }, {
       type: 'input',
       name: 'resourceName',
@@ -88,49 +97,74 @@ module.exports = yeoman.Base.extend({
       type: 'number',
       message: 'How many records would you like to have?'
     }];
-    return this.prompt(prompts).then(function(props){
+    return this.prompt(prompts).then(function (props) {
       var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
-      var schemaObj = jsonSchemaGenerator(JSON.parse(contents));
-      delete schemaObj.$schema;
-      props.JSONSchema= schemaObj;
+      if (props.dataType === 'Data Object') {
+        try {
+          schemaObj = GenerateSchema.json(props.resourceName, [JSON.parse(contents)]);
+          delete schemaObj.$schema;
+        } catch (error) {
+          throw new Error('Your \'' + props.resourceName + '\' resource has a JSON error\n' + error.message);
+        }
+      } else {
+        try {
+          schemaObj = JSON.parse(contents);
+        } catch (error) {
+          throw new Error('Your \'' + props.resourceName + '\' resource has a JSON error\n' + error.message);
+        }
+      }
+      props.JSONSchema = schemaObj;
       this.props = props;
+      // Add resource to API ARRAY
+      var temp = {
+        resourceName: props.resourceName,
+        JSONFilePath: props.JSONFilePath,
+        JSONSchema: schemaObj,
+        isPublic: props.isPublic,
+        HTTPMethods: props.APIHttpMethods,
+        requireFakeData: props.requireFakeData,
+        numberOfFakeRecords: props.numberOfFakeRecords
+      };
+      var apis = this.config.getAll().JSONExtraction;
+      apis.push(temp);
+      this.config.set({JSONExtraction: apis});
       this.config.set({addResource: props});
       this.composeWith('cedrus-api:http-status-codes', {options: {runningThrough: 'AddResource'}});
       this.composeWith('cedrus-api:create-yaml');
-      if(props.requireFakeData){
+      if (props.requireFakeData) {
         this.composeWith('cedrus-api:fake-data', {options: {runningThrough: 'AddResource'}});
       }
       done();
     }.bind(this));
   },
-  writing: function(){
-    if(this.props.isPublic){
-      //copying Resource to controllers
+  writing: function () {
+    if (this.props.isPublic) {
+      // copying Resource to controllers
       this.fs.copyTpl(
         this.templatePath('resource.js'),
-        this.destinationPath('./controllers/'+capitalizeFirstLetter(this.props.resourceName)+'.js'), {
+        this.destinationPath('./controllers/' + capitalizeFirstLetter(this.props.resourceName) + '.js'), {
           resourceName: capitalizeFirstLetter(this.props.resourceName),
-          httpMethods : this.props.APIHttpMethods
+          httpMethods: this.props.APIHttpMethods
         }
       );
-      //copying ResourceService to controllers
+      // copying ResourceService to controllers
       this.fs.copyTpl(
         this.templatePath('resourceService.js'),
-        this.destinationPath('./controllers/'+capitalizeFirstLetter(this.props.resourceName)+'Service.js'), {
+        this.destinationPath('./controllers/' + capitalizeFirstLetter(this.props.resourceName) + 'Service.js'), {
           resourceName: capitalizeFirstLetter(this.props.resourceName),
-          httpMethods : this.props.APIHttpMethods,
+          httpMethods: this.props.APIHttpMethods,
           fakeData: this.props.requireFakeData
         }
-      )
+      );
     }
   },
-  end: function(){
+  end: function () {
     var cb = this.async();
     cb();
   }
 });
 
-var updateYaml = function(cb){
+var updateYaml = function (cb) {
   fs.readFile(path.resolve('swaggerConfig/input.json'), 'utf8', function (error, jsonObj) {
     if (error) {
       throw error;
@@ -148,7 +182,7 @@ var updateYaml = function(cb){
     });
   });
   cb();
-}
+};
 var capitalizeFirstLetter = function (string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };

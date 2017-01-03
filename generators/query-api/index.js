@@ -6,11 +6,10 @@ var httpStatusCodes = ['200', '404', '500'];
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('ADD HTTPCODES');
+    console.log('ADD Query');
   },
   end: function () {
     var cb = this.async();
-    // console.log('options', this.config.getAll());
     var configOptions = this.config.getAll();
     addHTTPCodes(configOptions, cb);
   }
@@ -33,7 +32,6 @@ var addHTTPCodes = function (options, cb) {
     if (error) {
       throw error;
     }
-    // console.log('WE MADE IT', options);
     var inputJSON = JSON.parse(jsonObj);
     var apiPaths = options.JSONExtraction;
     apiPaths.forEach(function (apiPath) {
@@ -91,7 +89,7 @@ var addToPaths = function (inputJSON, options, apiPath) {
   var outline = {
     name: apiPath.whichParameter,
     in: 'path',
-    type: inputJSON.definitions[apiPath.resourceName].properties[apiPath.whichParameter].type,
+    type: inputJSON.definitions[apiPath.resourceName].items.properties[apiPath.whichParameter].type,
     required: true
   };
 //
