@@ -6,17 +6,16 @@ var path = require('path');
 var self;
 var cb;
 var apis = [];
-var configOptions;
 var schemaObj;
 
-var promptMe = function (prompts, configOptions, cb) {
+var promptMe = function (prompts, cb) {
   self.prompt(prompts).then(function (props) {
     // console.log('props JSON EXTRACTION', props);
     //
     // Extracting JSON Object from path
     //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
-    if (configOptions.DataInput.dataType === 'Data Object') {
+    if (props.dataType === 'Data Object') {
       try {
         schemaObj = GenerateSchema.json(props.resource, [JSON.parse(contents)]);
         delete schemaObj.$schema;
@@ -67,8 +66,12 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     self = this;
     cb = this.async();
-    configOptions = this.config.getAll();
     var prompts = [{
+      name: 'dataType',
+      message: 'Do you have a Data Object or a Data Schema?',
+      type: 'list',
+      choices: ['Data Object', 'Data Schema']
+    }, {
       type: 'input',
       name: 'resource',
       message: 'Enter name of your resource?',
@@ -158,7 +161,7 @@ module.exports = yeoman.Base.extend({
       message: 'Do you have more resources?'
     }];
     // Will ask questions about api until user is finished
-    promptMe(prompts, configOptions, function () {
+    promptMe(prompts, function () {
       console.log('done');
       cb();
     });
