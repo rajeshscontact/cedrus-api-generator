@@ -6,22 +6,35 @@ var path = require('path');
 var self;
 var cb;
 var apis = [];
+var schemaObj;
 
 var promptMe = function (prompts, cb) {
   self.prompt(prompts).then(function (props) {
-        // console.log('props JSON EXTRACTION', props);
-        //
-        // Extracting JSON Object from path
-        //
+    // console.log('props JSON EXTRACTION', props);
+    //
+    // Extracting JSON Object from path
+    //
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
-    var schemaObj = GenerateSchema.json(props.resource, [JSON.parse(contents)]);
-    delete schemaObj.$schema;
-        // console.log('Type : \n' + typeof contents);
-        // console.log('Output Content : \n' + contents);
-        // console.log('apis', apis);
-        //
-        // Create temp object to push to API array
-        //
+    if (props.dataType === 'Data Object') {
+      try {
+        schemaObj = GenerateSchema.json(props.resource, [JSON.parse(contents)]);
+        delete schemaObj.$schema;
+      } catch (error) {
+        throw new Error('Your \'' + props.resource + '\' resource has a JSON error\n' + error.message);
+      }
+    // console.log('Type : \n' + typeof contents);
+    // console.log('Output Content : \n' + contents);
+    // console.log('apis', apis);
+    } else {
+      try {
+        schemaObj = JSON.parse(contents);
+      } catch (error) {
+        throw new Error('Your \'' + props.resource + '\' resource has a JSON error\n' + error.message);
+      }
+    }
+    //
+    // Create temp object to push to API array
+    //
     var temp = {
       resourceName: props.resource,
       JSONFilePath: props.JSONFilePath,
@@ -33,13 +46,13 @@ var promptMe = function (prompts, cb) {
       requireQuery: props.requireQuery,
       whichParameter: props.whichParameter
     };
-        //
-        // Push object of info to API array
-        //
+    //
+    // Push object of info to API array
+    //
     apis.push(temp);
-        //
-        // If client has more resources continue asking questions if not save and break
-        //
+    //
+    // If client has more resources continue asking questions if not save and break
+    //
     if (props.ContinueBoolean) {
       promptMe(prompts, cb);
     } else {
@@ -54,6 +67,11 @@ module.exports = yeoman.Base.extend({
     self = this;
     cb = this.async();
     var prompts = [{
+      name: 'dataType',
+      message: 'Do you have a Data Object or a Data Schema?',
+      type: 'list',
+      choices: ['Data Object', 'Data Schema']
+    }, {
       type: 'input',
       name: 'resource',
       message: 'Enter name of your resource?',
@@ -142,7 +160,7 @@ module.exports = yeoman.Base.extend({
       name: 'ContinueBoolean',
       message: 'Do you have more resources?'
     }];
-        // Will ask questions about api until user is finished
+    // Will ask questions about api until user is finished
     promptMe(prompts, function () {
       console.log('done');
       cb();

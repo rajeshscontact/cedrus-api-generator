@@ -3,7 +3,7 @@ var yeoman = require('yeoman-generator');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('DATA INPUT');
+    // console.log('DATA INPUT');
     var prompts = [{
       type: 'confirm',
       name: 'JSONAvailable',
