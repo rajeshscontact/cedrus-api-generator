@@ -1,0 +1,15 @@
+{
+  "cloudformation": {
+    "stackName": "<%= stackName %>",
+    "templateLocation": "./aws/template.json",
+    "Capabilities": [
+      "CAPABILITY_IAM"
+    ]
+  },
+  "s3BucketName": "<%= s3BucketName %>",
+  "swaggerJsonLocation": "./aws/swagger.json",
+  "apigateway": {
+    "stage": "<%= deploymentStageName %>",
+    "id": ""
+  }
+}
