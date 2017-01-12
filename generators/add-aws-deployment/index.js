@@ -35,7 +35,7 @@ module.exports = yeoman.Base.extend({
         type: 'input',
         name: 'deploymentStageName',
         message: 'Enter your deployment stage name?',
-        default: 'v1'
+        default: 'dev'
       }];
       return this.prompt(prompts).then(function (props) {
         this.props = props;
@@ -113,9 +113,9 @@ var addAWSAPGatewayStuff = function(apiPaths, cb){
         var options = {
           "type": "aws",
           "uri": "arn:aws:apigateway:$AWSRegion:lambda:path/2015-03-31/functions/$LambdaArn/invocations",
-          "httpMethod": httpMethod,
+          "httpMethod": 'POST',
           "requestTemplates": {
-            "application/json": "{\"method\": \" "+httpMethod+apiPath.resourceName+" \"}"
+            "application/json": "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\"}"
           },
           "responses": {
             "default": {
