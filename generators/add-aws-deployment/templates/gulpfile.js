@@ -326,7 +326,9 @@ var s3 = new AWS.S3(),
               console.log(err, err.stack); // an error occurred
             }
             else {
-              console.log(data);           // successful response
+              console.log(data);           // successful response.
+              var basePathApi = inputConfig.apigateway.id+'.execute-api.'+awsConfig.region+'.amazonaws.com/'+inputConfig.apigateway.stage;
+              console.log('You can access your api through the base path of -------->', basePathApi);
               callback();
             }
           });
