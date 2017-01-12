@@ -280,6 +280,7 @@ var s3 = new AWS.S3(),
       if(typeof restAPIId !== 'undefined' && restAPIId !== null){
         gulp.src("./aws/parameters.json")
           .pipe(jeditor(function(json) {
+            json.apigateway.url = inputConfig.apigateway.id+'.execute-api.'+awsConfig.region+'.amazonaws.com/'+inputConfig.apigateway.stage;
             json.apigateway.id = restAPIId;
             return json;
           }))

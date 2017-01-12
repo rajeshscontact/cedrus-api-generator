@@ -115,7 +115,8 @@ var addAWSAPGatewayStuff = function(apiPaths, cb){
           "uri": "arn:aws:apigateway:$AWSRegion:lambda:path/2015-03-31/functions/$LambdaArn/invocations",
           "httpMethod": 'POST',
           "requestTemplates": {
-            "application/json": "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\"}"
+            "application/json":{}
+            //"application/json": "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\"}"
           },
           "responses": {
             "default": {
@@ -123,6 +124,17 @@ var addAWSAPGatewayStuff = function(apiPaths, cb){
             }
           }
         };
+        if(httpMethod === 'get'){
+          options.requestTemplates["application/json"] = "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\"}";
+        }
+        /*else if(httpMethod === 'post'){
+          options.requestTemplates["application/json"] = "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\", \"body\": $input.json('$')}";
+          options.responses.default.statusCode = "201";
+        }*/
+        else {
+            options.requestTemplates["application/json"] = "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\", \"body\": $input.json('$')}";
+            options.responses.default.statusCode = "204";
+        }
         inputJSON.paths['/'+apiPath.resourceName+'s'][httpMethod]['x-amazon-apigateway-integration'] = options;
       });
     });
