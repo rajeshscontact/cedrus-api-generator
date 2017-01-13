@@ -120,7 +120,10 @@ var addAWSAPGatewayStuff = function(apiPaths, cb){
           },
           "responses": {
             "default": {
-              "statusCode": "200"
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
             }
           }
         };
@@ -135,6 +138,22 @@ var addAWSAPGatewayStuff = function(apiPaths, cb){
             options.requestTemplates["application/json"] = "{\"method\": \""+httpMethod+capitalizeFirstLetter(apiPath.resourceName)+"\", \"body\": $input.json('$')}";
             options.responses.default.statusCode = "204";
         }
+        apiPath.httpStatusCodes.forEach(function (httpStatusCode) {
+          if(httpMethod === 'get' && httpStatusCode === '204'){
+            inputJSON.paths['/'+apiPath.resourceName+'s'][httpMethod]["responses"]["200"].headers = {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }else{
+            inputJSON.paths['/'+apiPath.resourceName+'s'][httpMethod]["responses"][httpStatusCode]["headers"] = {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+
+        });
         inputJSON.paths['/'+apiPath.resourceName+'s'][httpMethod]['x-amazon-apigateway-integration'] = options;
       });
     });

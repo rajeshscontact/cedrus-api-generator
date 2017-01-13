@@ -41,6 +41,7 @@ var promptMe = function (prompts, cb) {
       JSONSchema: schemaObj,
       isPublic: props.isPublic,
       HTTPMethods: props.APIHttpMethods,
+      httpStatusCodes: ['204', '404', '500'],
       requireFakeData: props.requireFakeData,
       numberOfFakeRecords: props.numberOfFakeRecords,
       requireQuery: props.requireQuery,
