@@ -17,8 +17,14 @@ var promptMe = function (prompts, cb) {
     var contents = fs.readFileSync(path.resolve(props.JSONFilePath), 'utf8');
     if (props.dataType === 'Data Object') {
       try {
-        schemaObj = GenerateSchema.json(props.resource, [JSON.parse(contents)]);
+        var jsonData = JSON.parse(contents);
+        if(jsonData[0] !== undefined){
+          schemaObj = GenerateSchema.json(props.resource, jsonData[0]);
+        }else{
+          schemaObj = GenerateSchema.json(props.resource, jsonData);
+        }
         delete schemaObj.$schema;
+
       } catch (error) {
         throw new Error('Your \'' + props.resource + '\' resource has a JSON error\n' + error.message);
       }
@@ -144,7 +150,8 @@ module.exports = yeoman.Base.extend({
       },
       name: 'numberOfFakeRecords',
       type: 'number',
-      message: 'How many records of test data would you like to have?'
+      message: 'How many records of test data would you like to have?',
+      default: 10
     }, {
       name: 'requireQuery',
       type: 'confirm',

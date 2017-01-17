@@ -2,6 +2,7 @@
 var yeoman = require('yeoman-generator');
 var fs = require('fs');
 var jsonSchemaFaker = require('json-schema-faker');
+var fakerMapping = require('./faker-mapping.json');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
@@ -53,7 +54,68 @@ var createFakeData = function (options, cb) {
   var apiPaths = options.JSONExtraction;
   apiPaths.forEach(function (apiPath) {
     if (apiPath.requireFakeData) {
-      createJson(apiPath.resourceName, apiPath.numberOfFakeRecords, apiPath.JSONSchema);
+      var jsonObj = apiPath.JSONSchema;
+      var jsonProperties = {};
+      var keys = [];
+      if(jsonObj.type === 'array'){
+        jsonProperties = jsonObj.items.properties;
+        keys = Object.keys(jsonObj.items.properties);
+      }else if(jsonObj.type === 'object'){
+        jsonProperties = jsonObj.properties;
+        keys = Object.keys(jsonObj.properties);
+      }
+      if(keys.length > 0){
+        keys.forEach(function(key){
+          if(jsonProperties[key]['type'] === 'array' || jsonProperties[key]['type'] === 'object'){
+            var subKeys = [];
+            if(jsonProperties[key]['type'] === 'array'){
+              subKeys = Object.keys(jsonProperties[key]['items']['properties']);
+            }else if(jsonProperties[key]['type'] === 'object'){
+              subKeys = Object.keys(jsonProperties[key]['properties']);
+            }
+            if(subKeys.length > 0){
+              subKeys.forEach(function(subKey){
+                var subKeyLowerCase = subKey.toLowerCase();
+                if(fakerMapping[subKeyLowerCase] != undefined){
+                  if(jsonObj.type === 'array'){
+                    if(jsonProperties[key]['type'] === 'array'){
+                      jsonObj.items.properties[key]['items']['properties'][subKey]['faker'] = fakerMapping[subKeyLowerCase];
+                    }else if(jsonProperties[key]['type'] === 'object'){
+                      jsonObj.items.properties[key]['properties'][subKey]['faker'] = fakerMapping[subKeyLowerCase];
+                    }
+                  }else if(jsonObj.type === 'object'){
+                    if(jsonProperties[key]['type'] === 'array'){
+                      jsonObj.properties[key]['items']['properties'][subKey]['faker'] = fakerMapping[subKeyLowerCase];
+                    }else if(jsonProperties[key]['type'] === 'object'){
+                      jsonObj.properties[key]['properties'][subKey]['faker'] = fakerMapping[subKeyLowerCase];
+                    }
+                  }
+                }
+              });
+            }
+          }else{
+            var keyLowerCase = key.toLowerCase();
+            if(keyLowerCase === 'age'){
+              if(jsonObj.type === 'array'){
+                jsonObj.items.properties[key]['maximum'] = 150;
+                jsonObj.items.properties[key]['minimum'] = 0;
+              }else if(jsonObj.type === 'object'){
+                jsonObj.properties[key]['maximum'] = 150;
+                jsonObj.properties[key]['minimum'] = 0;
+              }
+            }
+            if(fakerMapping[keyLowerCase] != undefined){
+              if(jsonObj.type === 'array'){
+                jsonObj.items.properties[key]['faker'] = fakerMapping[keyLowerCase];
+              }else if(jsonObj.type === 'object'){
+                jsonObj.properties[key]['faker'] = fakerMapping[keyLowerCase];
+              }
+            }
+          }
+        });
+        jsonObj.required = keys;
+      }
+      createJson(apiPath.resourceName, apiPath.numberOfFakeRecords, jsonObj);
     }
   });
   cb();
