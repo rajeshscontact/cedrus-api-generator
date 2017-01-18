@@ -63,9 +63,9 @@ module.exports = yeoman.Base.extend({
     return this.prompt(prompts).then(function (props) {
       // console.log('props DataInput', props);
       var DataToSaveInYo = props;
-      if (props.s3BucketAvailable && props.createS3Bucket) {
+      if(props.s3BucketAvailable){
         this.composeWith('cedrus-api:complete-add-aws-deployment');
-      } else if((!props.s3BucketAvailable) && props.createS3Bucket){
+      }else if(props.createS3Bucket){
         var allConfig = this.config.getAll();
         var bucketName = props.s3BucketName + '-' +(allConfig.APIOverviewProps.APIName).split(' ').join('-')+ '-' +Date.now();
         DataToSaveInYo.s3BucketName = bucketName.toLowerCase();
