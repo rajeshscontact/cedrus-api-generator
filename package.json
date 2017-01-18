@@ -17,6 +17,7 @@
     "yeoman-generator"
   ],
   "dependencies": {
+    "aws-sdk": "^2.7.24",
     "chalk": "^1.0.0",
     "del": "^2.2.2",
     "generate-schema": "^2.3.1",

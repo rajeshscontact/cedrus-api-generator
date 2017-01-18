@@ -92,6 +92,11 @@ var createFakeData = function (options, cb) {
                   }
                 }
               });
+              if(jsonObj.type === 'array'){
+                jsonObj.items.properties[key]['required']=subKeys;
+              }else if(jsonObj.type === 'object'){
+                jsonObj.properties[key]['required'] = subKeys;
+              }
             }
           }else{
             var keyLowerCase = key.toLowerCase();

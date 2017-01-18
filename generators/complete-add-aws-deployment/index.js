@@ -5,17 +5,32 @@ var path = require('path');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('START Aws deployment');
-
       var done = this.async();
+      var allConfig = this.config.getAll();
       var prompts = [{
+        when: function () {
+          if(allConfig.DataInput.accessKeyId !== undefined){
+            return false;
+          }else {
+            return true;
+          }
+        },
         type: 'input',
         name: 'accessKeyId',
-        message: 'Enter your AWS accessId?'
+        message: 'Enter your AWS accessId?',
+        store: true
       }, {
+        when: function () {
+          if(allConfig.DataInput.secretAccessKey !== undefined){
+            return false;
+          }else {
+            return true;
+          }
+        },
         type: 'input',
         name: 'secretAccessKey',
-        message: 'Enter your AWS secret access?'
+        message: 'Enter your AWS secret access?',
+        store: true
       }, {
         type: 'input',
         name: 'region',
@@ -27,6 +42,13 @@ module.exports = yeoman.Base.extend({
         message: 'Enter your stack name?',
         default: 'SimpleApiCloudFormationStack'
       }, {
+        when: function () {
+          if(allConfig.DataInput.s3BucketName !== undefined){
+            return false;
+          }else {
+            return true;
+          }
+        },
         type: 'input',
         name: 's3BucketName',
         message: 'Enter your bucket name?',
