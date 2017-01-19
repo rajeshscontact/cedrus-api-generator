@@ -89,7 +89,7 @@ var addToPaths = function (inputJSON, options, apiPath) {
   var outline = {
     name: apiPath.whichParameter,
     in: 'path',
-    type: inputJSON.definitions[apiPath.resourceName].items.properties[apiPath.whichParameter].type,
+    type: (inputJSON.definitions[apiPath.resourceName].items !== undefined)  ? inputJSON.definitions[apiPath.resourceName].items.properties[apiPath.whichParameter].type : inputJSON.definitions[apiPath.resourceName].properties[apiPath.whichParameter].type,
     required: true
   };
 //

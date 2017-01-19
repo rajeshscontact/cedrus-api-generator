@@ -68,11 +68,12 @@ module.exports = yeoman.Base.extend({
       }.bind(this));
   },
   writing: function () {
+    var allConfig = this.config.getAll();
     this.fs.copyTpl(
       this.templatePath('config.json'),
       this.destinationPath('./aws/config.json'), {
-        accessKeyId: this.props.accessKeyId,
-        secretAccessKey: this.props.secretAccessKey,
+        accessKeyId: this.props.accessKeyId || allConfig.DataInput.accessKeyId,
+        secretAccessKey: this.props.secretAccessKey || allConfig.DataInput.secretAccessKey,
         region: this.props.region
       }
     );
@@ -80,7 +81,7 @@ module.exports = yeoman.Base.extend({
       this.templatePath('parameters.json'),
       this.destinationPath('./aws/parameters.json'), {
         stackName: this.props.stackName,
-        s3BucketName: this.props.s3BucketName,
+        s3BucketName: this.props.s3BucketName || allConfig.DataInput.s3BucketName,
         deploymentStageName: this.props.deploymentStageName
       }
     );
