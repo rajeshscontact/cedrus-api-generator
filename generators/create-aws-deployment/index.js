@@ -1,7 +1,6 @@
 'use strict';
 var yeoman = require('yeoman-generator'),
-  AWS = require('aws-sdk'),
-  s3 = new AWS.S3();
+  AWS = require('aws-sdk');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
@@ -67,6 +66,10 @@ module.exports = yeoman.Base.extend({
         this.composeWith('cedrus-api:complete-add-aws-deployment');
       }else {
         if(props.createS3Bucket){
+          AWS.config.update({
+            accessKeyId: props.accessKeyId, secretAccessKey: props.secretAccessKey
+          });
+          var s3 = new AWS.S3();
           var allConfig = this.config.getAll();
           var bucketName = props.s3BucketName + '-' +(allConfig.APIOverviewProps.APIName).split(' ').join('-')+ '-' +Date.now();
           DataToSaveInYo.s3BucketName = bucketName.toLowerCase();
