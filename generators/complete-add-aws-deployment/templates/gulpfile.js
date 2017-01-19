@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     gulpS3Upload = require('gulp-s3-upload')(awsConfig)
     inputConfig = require('./aws/parameters.json');
 
-    AWS.config.update({region:awsConfig.region});
+    AWS.config.update({accessKeyId:awsConfig.accessKeyId, secretAccessKey: awsConfig.secretAccessKey, region:awsConfig.region});
 
 var s3 = new AWS.S3(),
     cloudformation = new AWS.CloudFormation(),
