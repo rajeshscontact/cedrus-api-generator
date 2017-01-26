@@ -7,7 +7,7 @@ var writeYaml = require('write-yaml');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('ADD HTTPCODES');
+    //console.log('ADD HTTPCODES');
   },
   end: function () {
     var cb = this.async();
@@ -89,6 +89,9 @@ var addToPaths = function (inputJSON, options, fromRelationship, toRelationship)
     httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + toRelationship + ' from ' + fromRelationship + ' from the system that the user has access to';
     httpOptions.operationId = httpMethod + capitalizeFirstLetter(toRelationship) + 's';
     httpOptions.produces = options.APIOverviewProps.APIProduces;
+    if(httpMethod !== 'get'){
+      httpOptions.consumes = options.APIOverviewProps.APIConsumes;
+    }
     httpOptions.parameters = [];
     var outline = {
       name: 'id',

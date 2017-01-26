@@ -6,7 +6,7 @@ var httpStatusCodes = ['204', '404', '500'];
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('ADD HTTPCODES');
+    //console.log('ADD HTTPCODES');
   },
   end: function () {
     var cb = this.async();
@@ -46,14 +46,14 @@ var addHTTPCodes = function (options, isAddResource, cb) {
     if(isAddResource){
       addToDefinitions(inputJSON, options.addResource.resourceName, options.addResource.JSONSchema);
       if (options.addResource.isPublic) {
-        addToPaths(inputJSON, options.APIOverviewProps.APIProduces, options.addResource.APIHttpMethods, options.addResource.resourceName);
+        addToPaths(inputJSON, options.APIOverviewProps.APIProduces, options.APIOverviewProps.APIConsumes, options.addResource.APIHttpMethods, options.addResource.resourceName);
       }
     }else{
       var apiPaths = options.JSONExtraction;
       apiPaths.forEach(function (apiPath) {
         addToDefinitions(inputJSON, apiPath.resourceName, apiPath.JSONSchema);
         if (apiPath.isPublic) {
-          addToPaths(inputJSON, options.APIOverviewProps.APIProduces, apiPath.HTTPMethods, apiPath.resourceName);
+          addToPaths(inputJSON, options.APIOverviewProps.APIProduces, options.APIOverviewProps.APIConsumes, apiPath.HTTPMethods, apiPath.resourceName);
         }
       });
     }
@@ -80,7 +80,7 @@ var addToDefinitions = function (inputJSON, resourceName, schemaObj) {
 /*
 ** This method add's user selected paths with appropriate error codes
 */
-var addToPaths = function (inputJSON, apiProduces, httpMethodList, resourceName) {
+var addToPaths = function (inputJSON, apiProduces, apiConsumes, httpMethodList, resourceName) {
   if (inputJSON.paths === {} || typeof inputJSON.paths['/' + resourceName + 's'] === 'undefined') {
     inputJSON.paths['/' + resourceName + 's'] = {};
   }
@@ -95,6 +95,9 @@ var addToPaths = function (inputJSON, apiProduces, httpMethodList, resourceName)
     httpOptions.description = capitalizeFirstLetter(httpMethod) + 's all ' + resourceName + 's from the system that the user has access to';
     httpOptions.operationId = httpMethod + capitalizeFirstLetter(resourceName);
     httpOptions.produces = apiProduces;
+    if(httpMethod !== 'get'){
+      httpOptions.consumes = apiConsumes;
+    }
     httpOptions['x-swagger-router-controller'] = capitalizeFirstLetter(resourceName);
     httpOptions.responses = {};
     //

@@ -5,7 +5,7 @@ var path = require('path');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('ADD Parameters');
+    //console.log('ADD Parameters');
   },
   end: function () {
     var cb = this.async();

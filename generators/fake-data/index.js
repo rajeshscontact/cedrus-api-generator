@@ -120,13 +120,13 @@ var createFakeData = function (options, cb) {
         });
         jsonObj.required = keys;
       }
-      createJson(apiPath.resourceName, apiPath.numberOfFakeRecords, jsonObj);
+      createJson(apiPath.resourceName, apiPath.numberOfFakeRecords, jsonObj, options.DataInput.applicationType);
     }
   });
   cb();
 };
 
-var createJson = function (resourceName, numberOfRecords, schemaObj) {
+var createJson = function (resourceName, numberOfRecords, schemaObj, applicationType) {
   var inputJSONArray = [];
   for (var i = 0; i < numberOfRecords; i++) {
     var inputJSON = jsonSchemaFaker(schemaObj);
@@ -135,7 +135,14 @@ var createJson = function (resourceName, numberOfRecords, schemaObj) {
       if (!fs.existsSync('./sampleData')) {
         fs.mkdirSync('./sampleData');
       }
-      fs.writeFile('./sampleData/' + capitalizeFirstLetter(resourceName) + '.json', JSON.stringify(inputJSONArray), function (err) {
+      var path = './sampleData/' + capitalizeFirstLetter(resourceName) + '.json';
+      if(applicationType === 'java'){
+        if (!fs.existsSync('./src/main/resources/sampleData')) {
+          fs.mkdirSync('./src/main/resources/sampleData');
+        }
+        path = './src/main/resources/sampleData/' + capitalizeFirstLetter(resourceName) + '.json'
+      }
+      fs.writeFile(path, JSON.stringify(inputJSONArray), function (err) {
         if (err) {
           return console.log(err);
         }

@@ -1,0 +1,4 @@
+<server description="<%= applicationName %>">
+    <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
+        id="defaultHttpEndpoint" />
+</server>

@@ -13,7 +13,7 @@ var language = 'nodejs-server';
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('START Swagger Gen');
+    //console.log('START Swagger Gen');
   },
   writing: function () {
     // this.copy('input.yaml', 'swaggerConfig/input.yaml');

@@ -6,7 +6,7 @@ var httpStatusCodes = ['200', '404', '500'];
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('ADD Query');
+    //console.log('ADD Query');
   },
   end: function () {
     var cb = this.async();

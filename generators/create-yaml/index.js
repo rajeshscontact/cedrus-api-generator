@@ -6,7 +6,7 @@ var writeYaml = require('write-yaml');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('CREATE YAML');
+    //console.log('CREATE YAML');
   },
   end: function () {
     var cb = this.async();

@@ -170,7 +170,7 @@ module.exports = yeoman.Base.extend({
     }];
     // Will ask questions about api until user is finished
     promptMe(prompts, function () {
-      console.log('done');
+      //console.log('done');
       cb();
     });
   }

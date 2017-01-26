@@ -5,7 +5,7 @@ var path = require('path');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
-    console.log('CREATE JSON INPUT');
+    //console.log('CREATE JSON INPUT');
   },
   writing: function () {
     this.copy('input.json', 'swaggerConfig/input.json');
@@ -30,7 +30,7 @@ var createJsonInput = function (options, cb) {
     inputJSON.info.title = options.APIOverviewProps.APIName;
     inputJSON.info.description = options.APIOverviewProps.APIDescription;
     inputJSON.basePath = options.APIOverviewProps.APIBasePath;
-    inputJSON.consumes = options.APIOverviewProps.APIConsumes;
+    //inputJSON.consumes = options.APIOverviewProps.APIConsumes;
     inputJSON.produces = options.APIOverviewProps.APIProduces;
     /*
     ** saving final json file for future references
