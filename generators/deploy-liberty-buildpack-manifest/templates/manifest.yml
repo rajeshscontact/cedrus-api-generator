@@ -1,0 +1,5 @@
+---
+applications:
+- name: <%= appName %>
+  memory: <%= appMemory %>
+  buildpack: liberty-for-java
