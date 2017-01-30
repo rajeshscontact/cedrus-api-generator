@@ -46,6 +46,40 @@ module.exports = yeoman.Base.extend({
       if ( err ) console.log('ERROR: ' + err);
     });
     this.copy("server.xml", "./src/main/liberty/config/server.xml");
+    var cb=this.async();
+    updateYamlForBluemix(this.appName, cb);
   }
 
  });
+
+ var updateYamlForBluemix = function(appName, cb){
+   fs.readFile(path.resolve('swaggerConfig/input.json'), 'utf8', function (error, jsonObj) {
+     if (error) {
+       cb(error);
+     }
+     var inputJSON = JSON.parse(jsonObj);
+     var index = inputJSON.schemes.indexOf('http');
+     if (index > -1) {
+       inputJSON.schemes.splice(index, 1);
+     }
+     inputJSON.host = '$(catalog.host)';
+     inputJSON['x-ibm-configuration'].assembly.execute[0].invoke['target-url'] = 'https://'+appName.toLowerCase()+'.mybluemix.net$(request.path)$(request.search)';
+     fs.writeFile('swaggerConfig/input.json', JSON.stringify(inputJSON), function (err) {
+       if (err) {
+         return console.log(err);
+       }
+       console.log('The Json file is saved!');
+     /*
+     **  Creating the Yaml file from the json
+     */
+       writeYaml('swaggerConfig/input.yaml', inputJSON, function (err) {
+         if (err) {
+           return console.log(err);
+         }
+         console.log('The Yaml file is saved!');
+         cb();
+       });
+     });
+   });
+
+ }

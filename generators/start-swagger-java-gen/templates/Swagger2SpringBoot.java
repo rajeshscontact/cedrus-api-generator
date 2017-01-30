@@ -1,4 +1,4 @@
-package io.cedrus.apigen;
+package <%= basePath %>;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;

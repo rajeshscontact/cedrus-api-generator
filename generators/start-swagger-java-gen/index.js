@@ -75,13 +75,16 @@ var copyTemplates = function(thisFunc, cb){
         thisFunc.fs.copyTpl(
           thisFunc.templatePath('Swagger2SpringBoot.java'),
           thisFunc.destinationPath('./src/main/java/'+folderPath+'/Swagger2SpringBoot.java'), {
-            basePackage: javaOptions.basePackage
+            basePackage: javaOptions.basePackage,
+            basePath: javaOptions.basePackage
           }
         );
 
         thisFunc.fs.copyTpl(
           thisFunc.templatePath('HomeController.java'),
-          thisFunc.destinationPath('./src/main/java/'+folderPath+'/config/HomeController.java')
+          thisFunc.destinationPath('./src/main/java/'+folderPath+'/config/HomeController.java'),{
+            basePath: javaOptions.basePackage
+          }
         );
 
         thisFunc.fs.copyTpl(

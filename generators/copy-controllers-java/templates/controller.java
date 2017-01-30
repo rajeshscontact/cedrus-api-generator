@@ -1,6 +1,6 @@
 package <%= basePath %>.api;
 
-import io.cedrus.apigen.model.<%= resourceName %>;
+import <%= basePath %>.model.<%= resourceName %>;
 import io.swagger.annotations.*;
 
 import org.springframework.http.HttpStatus;
