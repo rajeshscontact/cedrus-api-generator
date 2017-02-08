@@ -60,7 +60,7 @@ var updateYamlForBluemix = function(appName, cb){
     }
     inputJSON.host = '$(catalog.host)';
     inputJSON['x-ibm-configuration'].assembly.execute[0].invoke['target-url'] = 'https://'+appName.toLowerCase()+'.mybluemix.net$(request.path)$(request.search)';
-    fs.writeFile('swaggerConfig/input.json', JSON.stringify(inputJSON), function (err) {
+    fs.writeFile('swaggerConfig/bluemix.json', JSON.stringify(inputJSON), function (err) {
       if (err) {
         return console.log(err);
       }
@@ -68,7 +68,7 @@ var updateYamlForBluemix = function(appName, cb){
     /*
     **  Creating the Yaml file from the json
     */
-      writeYaml('swaggerConfig/input.yaml', inputJSON, function (err) {
+      writeYaml('swaggerConfig/bluemix.yaml', inputJSON, function (err) {
         if (err) {
           return console.log(err);
         }
